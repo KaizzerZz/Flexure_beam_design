@@ -21,6 +21,7 @@ def Define_beam(fc,fy,Es,b,h,strr,s_d_t,espacing,s_d_c,path):
     beam_sec_1.Create_section()
     beam_sec_1.Find_c()
     beam_sec_1.Asmin_E060()
+    beam_sec_1.Plot_rec_beam(path)
     beam_sec_1.section.Plot_comp_defo()
     beam_sec_1.section.Save_comp_defo(path)
     return beam_sec_1
