@@ -144,7 +144,7 @@ if button:
         Generate_report(beam)
         st.success("Report generated!")
     except:
-        pass
+        st.error("Erro")
     button=False
 try:
     with open("./Reports/report_beam_section.pdf", "rb") as pdf_file:
