@@ -155,7 +155,7 @@ button = st.button("Generate Report")
 
 if button:
     try:
-        Generate_report(beam)
+        Generate_report_web()
         st.success("Report generated!")
     except:
         st.error("Error")
