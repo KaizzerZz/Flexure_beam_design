@@ -9,12 +9,11 @@ import os
 
 path = "./Images"
 
-def Flexure_Beam_Rec_Section(fc,fy,Es,b,h,strr,s_d_t,espacing,s_d_c,path):
-    L = 1 #m
+def Define_beam(fc,fy,Es,b,h,strr,s_d_t,espacing,s_d_c,path):
+    L = 1#m
     ref = "Otro"
-
+    
     beam = Viga(L,fc,fy,Es)
-
     beam.Rec_section(b,h)
     beam_sec_1 = Seccion_Viga(beam,ref,strr,recover=4)
     beam_sec_1.Steel_distribution_t(s_d_t,espacing)
@@ -22,12 +21,15 @@ def Flexure_Beam_Rec_Section(fc,fy,Es,b,h,strr,s_d_t,espacing,s_d_c,path):
     beam_sec_1.Create_section()
     beam_sec_1.Find_c()
     beam_sec_1.Asmin_E060()
-    beam_sec_1.Plot_rec_beam(path)
     beam_sec_1.section.Plot_comp_defo()
     beam_sec_1.section.Save_comp_defo(path)
     return beam_sec_1
 
-def Generate_report(beam):
+def Make_calculus(beam,s_d_t,espacing,s_d_c,path):
+    
+    return beam
+
+def Generate_report_download(beam):
     
     env = Environment(
         
@@ -47,8 +49,9 @@ def Generate_report(beam):
     #st.write(os.path.isfile('./Reports/report_beam_section.tex'))
     os.system(f"pdflatex --output-directory=./Reports ./Reports/report_beam_section.tex")
 
-def Generate_report_web(fc,fy,Es,b,h,strr,s_d_t,espacing,s_d_c,path):
-    beam = Flexure_Beam_Rec_Section(fc,fy,Es,b,h,strr,s_d_t,espacing,s_d_c,path)
+def Generate_report_web(beam):
+    #beam = Flexure_Beam_Rec_Section(fc,fy,Es,b,h,strr,s_d_t,espacing,s_d_c,path)
+    
     st.title("Compatibilidad de deformaciones y área de Whitney")
     st.image('./Images/Beam sect.png',use_column_width="auto",caption="Sección de viga y área de Whitney")
     st.image('./Images/Beam deformation compatibility.png',use_column_width="auto",caption="Compatibilidad de deformaciones")
@@ -129,13 +132,8 @@ st.title("Diseño de viga a flexión")
 st.write("Para definir la sección de la viga, se deberá indicar sus propiedades geométricas, del material y de la distribución de aceros en tracción y compresión.")
 st.write("En la parte final podrá descargar una memoria de los cálculos realizados internamente así como la verificación de acero mínimo según la E060 y el tipo de falla que se presentaría.")
 
-for i in range(beam.section.n_s):
-    st.write(f"**Capa {i+1}:**")
-    st.latex(f"es_{i+1}={str(beam.section.es[i])},fs_{i+1}={str(beam.section.fs[i])}kgf/cm^2,Fs_{i+1}=fs_{i+1}As_{i+1}={str(round(beam.section.Fs[i],2))}tonf")
-
-st.write("***3)Fuerzas nominales***")
-st.latex(f"P_n=C_c+ \sum Fs_i= {str(round(beam.section.Pn,2))} tonf")
-st.latex(f"M_n=C_c(CP-y_c)+ \sum Fs_i(CP-y_i)={str(round(beam.section.Mn,2))} tonf-m")
+beam = Define_beam(fc,fy,Es,b,h,strr,s_d_t,espacing,s_d_c,path)
+st.image('./Images/Beam Section.png',use_column_width="auto",caption="Sección de viga propuesta")
 
 #rf"P_{{\text{{total}}}} = {round(P_tot/1000,2)} ton-f"
 
@@ -143,7 +141,7 @@ button = st.button("Generate Report")
 
 if button:
     try:
-        Generate_report_web(fc,fy,Es,b,h,strr,s_d_t,espacing,s_d_c,path)
+        Generate_report_web(beam)
         st.success("Report generated!")
     except:
         st.error("Error")
