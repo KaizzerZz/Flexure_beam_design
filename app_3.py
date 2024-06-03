@@ -56,6 +56,7 @@ def Generate_report_web():
     st.write("***1) Cálculos previos:***")
     st.latex(f"c={str(round(beam.section.c,2))}cm")
     st.latex(f"β_1={str(beam.section.b1)},a=β_1c={str(round(beam.section.a,2))} cm")
+    st.latex(f"A_w={str(round(beam.section.Aw,2))} cm^2")
     st.write("***2) Fuerzas de acero y concreto:***")
     st.latex(f"C_c=0.85f'cAw={str(round(beam.section.Cc,2))} tonf")
     for i in range(beam.section.n_s):
