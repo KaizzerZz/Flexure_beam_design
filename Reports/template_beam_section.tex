@@ -1,0 +1,113 @@
+\documentclass[11pt, a4paper]{report}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{caption}
+\usepackage{mathtools}
+
+\graphicspath{ {./Images} }
+
+
+\title{Diseño de viga rectangular}
+
+\begin{document}
+
+\begin{center}
+\centering 
+\textbf{Memoria de cálculo de diseño de viga a flexión}
+\vspace{0.3cm}
+
+\textbf{Método de compatibilidad de deformaciones}
+\vspace{0.2cm}
+\end{center}
+
+\begin{enumerate}  
+    \item Distribución de aceros propuesta
+    \begin{center}
+    \begin{minipage}{8.2cm} 
+        \centering 
+        \setlength\fboxsep{0pt}
+        \setlength\fboxrule{0.3pt}
+
+        \includegraphics[trim={1mm 0.5mm 1mm 0.5mm},clip,width=1.0\textwidth]{Beam Section.png}
+    \end{minipage}
+    \end{center}
+
+    \[f'c = {{beam.section.fc}}kg/cm^2\]
+    \[fy = {{beam.section.fy}}kg/cm^2\]
+    
+    \item Condición de falla: $e_t>=0.004$
+    \item Compatibilidad de deformaciones:
+    %%Section.plot_comp_defo and stresses distribution (put it in just one figure with two axis)
+    
+    \begin{figure}[h]  %%It is importat to place the figure in a good place
+        \begin{multicols}{2}
+            \begin{minipage}[c]{6.5cm}
+                \centering
+                \setlength\fboxsep{0pt}
+                \setlength\fboxrule{0.3pt}
+                \includegraphics[trim={1mm 0.5mm 1mm 0.5mm},clip,width=1.0\textwidth]{Beam sect.png}
+            \end{minipage}
+            \captionsetup{justification=centering}
+            \captionof{figure}{Sección}
+
+            \begin{minipage}[c]{6.5cm}
+                \centering
+                \setlength\fboxsep{0pt}
+                \setlength\fboxrule{0.3pt}
+                \includegraphics[trim={1mm 0.5mm 1mm 0.5mm},clip,width=1.0\textwidth]{Beam deformation compatibility.png}
+            \end{minipage}
+            \captionsetup{justification=centering}
+            \captionof{figure}{Deformaciones}
+        \end{multicols}
+    \end{figure}
+
+    \item Cálculos:
+
+    \begin{enumerate}
+    
+    \item Cálculos previos
+    \[ c={{ beam.section.c|round(1) }} cm \]
+    \[ \beta _1={{beam.section.b1|round(1)}} \rightarrow a=\beta _1 c = {{beam.section.a|round(1)}} cm \]
+    \[ Aw = {{ beam.section.Aw|round(1) }} cm^2 \] %corresponds to the Witney section of the beam section
+    \item Fuerzas de acero y concreto
+    \[ C_c = 0.85f'c Aw = {{beam.section.Cc|round(1)}} tf-m\]
+
+    \begin{equation}
+    \begin{dcases}
+    {% for i in range(beam.section.n_s) -%}
+        es_{{i+1}}={{beam.section.es[i]|round(4)}} \rightarrow fs_{{i+1}}={{beam.section.fs[i]|round|int}} kgf/cm^2 \rightarrow Fs_{{i+1}}=As_{{i+1}}fs_{{i+1}}={{beam.section.Fs[i]|round(2)}} tf \\
+    {% endfor -%}
+    \end{dcases}
+    \end{equation}
+
+    \item Fuerzas nominales
+    \[ Pn = C_c + \sum Fs_i = {{beam.section.Pn|round(1)}} tonf\]
+    \[ Mn = C_c(CP-\bar{y_c}) + \sum Fs_i(CP-y_i) = {{beam.section.Mn|round(1)}} tonf-m\]
+    
+    \item Tipo de falla:
+    {% set et = beam.section.et|round(4) %}
+    {% set ey = beam.section.ey|round(4) %}
+
+    {% if et|abs()>=0.005 %}
+        $ et={{et}} < 0.005 \therefore \text{Falla ductil} $
+    {% elif et|abs()<ey %}
+        $ et={{et}} < {{ey}} \therefore \text{Falla frágil} $ 
+    {% elif et|abs()>=ey and et<=0.005 %}
+        $ ey={{ey}} < et={{et}}<0.005 \therefore \text{Falla intermedia} $
+    {% endif %}
+
+    \item Acero mínimo según E060:
+    $$ As_{min} = 0.7\frac{\sqrt{f'c}}{fy}b_w d = {{beam.Asmin|round(1)}} cm^2 $$
+    $$ As_{tot} = {{beam.As_tot|round(1)}} cm^2 $$
+    {% if beam.As_tot>=beam.Asmin %}
+        $$ As_{total} \geq As_{min} \therefore \text{Cumple con la cuantía mínima} $$
+    {% else %}
+        $$ As_{total}<As_{min} \therefore \text{No cumple con la cuantía mínima} $$
+    {% endif %}
+
+    \end{enumerate}
+\end{enumerate}
+\end{document}
