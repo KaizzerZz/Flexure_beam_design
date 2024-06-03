@@ -35,8 +35,12 @@ def Generate_report(beam):
 
     template = env.get_template('./Reports/template_beam_section.tex')      
 
-    with open('./Reports/report_beam_section.tex', "w",encoding='utf-8') as f: 
-        f.write(template.render(beam=beam))
+    with open('./Reports/report_beam_section.tex', "w",encoding='utf-8') as f:
+        try:
+            f.write(template.render(beam=beam))
+            st.write("Succesfully written")
+        except:
+            pass
 
     os.system(f"pdflatex --output-directory=./Reports ./Reports/report_beam_section.tex")
 
