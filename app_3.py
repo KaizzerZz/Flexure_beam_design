@@ -2,6 +2,7 @@ from Packages.Sections import Sections
 from Packages.Viga import Seccion_Viga,Viga
 import streamlit as st
 import numpy as np
+import subprocess
 
 path = "./Images"
 
@@ -42,7 +43,15 @@ def Generate_report(beam):
         except:
             pass
 
-    os.system(f"pdflatex --output-directory=./Reports ./Reports/report_beam_section.tex")
+    #os.system(f"pdflatex --output-directory=./Reports ./Reports/report_beam_section.tex")
+    output_dir='./Reports'
+    tex_file_path='./Reports/report_beam_section.tex'
+    subprocess.run(
+            ['pdflatex', '-output-directory', output_dir, tex_file_path],
+            check=True,  # Raise an error if the command fails
+            stdout=subprocess.PIPE,  # Capture standard output
+            stderr=subprocess.PIPE   # Capture standard error
+        )
 
 with st.sidebar:
     st.title("Propiedades geométricas")
