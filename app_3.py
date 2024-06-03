@@ -47,7 +47,7 @@ def Generate_report(beam):
     #st.write(os.path.isfile('./Reports/report_beam_section.tex'))
     os.system(f"pdflatex --output-directory=./Reports ./Reports/report_beam_section.tex")
 
-def Generate_report_web():
+def Generate_report_web(fc,fy,Es,b,h,strr,s_d_t,espacing,s_d_c,path):
     beam = Flexure_Beam_Rec_Section(fc,fy,Es,b,h,strr,s_d_t,espacing,s_d_c,path)
     st.title("Compatibilidad de deformaciones y área de Whitney")
     st.image('./Images/Beam sect.png',use_column_width="auto",caption="Sección de viga y área de Whitney")
@@ -129,19 +129,6 @@ st.title("Diseño de viga a flexión")
 st.write("Para definir la sección de la viga, se deberá indicar sus propiedades geométricas, del material y de la distribución de aceros en tracción y compresión.")
 st.write("En la parte final podrá descargar una memoria de los cálculos realizados internamente así como la verificación de acero mínimo según la E060 y el tipo de falla que se presentaría.")
 
-beam = Flexure_Beam_Rec_Section(fc,fy,Es,b,h,strr,s_d_t,espacing,s_d_c,path)
-
-st.title("Sección de concreto y distribución de aceros")
-st.image('./Images/Beam Section.png',use_column_width="auto",caption="Distribución de aceros propuesta")
-st.title("Compatibilidad de deformaciones y área de Whitney")
-st.image('./Images/Beam sect.png',use_column_width="auto",caption="Sección de viga y área de Whitney")
-st.image('./Images/Beam deformation compatibility.png',use_column_width="auto",caption="Compatibilidad de deformaciones")
-st.title("Cálculos")
-st.write("***1) Cálculos previos:***")
-st.latex(f"c={str(round(beam.section.c,2))}cm")
-st.latex(f"β_1={str(beam.section.b1)},a=β_1c={str(round(beam.section.a,2))} cm")
-st.write("***2) Fuerzas de acero y concreto:***")
-st.latex(f"C_c=0.85f'cAw={str(round(beam.section.Cc,2))} tonf")
 for i in range(beam.section.n_s):
     st.write(f"**Capa {i+1}:**")
     st.latex(f"es_{i+1}={str(beam.section.es[i])},fs_{i+1}={str(beam.section.fs[i])}kgf/cm^2,Fs_{i+1}=fs_{i+1}As_{i+1}={str(round(beam.section.Fs[i],2))}tonf")
@@ -156,7 +143,7 @@ button = st.button("Generate Report")
 
 if button:
     try:
-        Generate_report_web()
+        Generate_report_web(fc,fy,Es,b,h,strr,s_d_t,espacing,s_d_c,path)
         st.success("Report generated!")
     except:
         st.error("Error")
