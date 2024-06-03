@@ -110,7 +110,7 @@ with st.sidebar:
             for j in range(columns_t):
                 with cols[i][j]:
                     #s_d_t = st.text_input("Diam.",value="1/2")
-                    value = st.text_input(f'Diam.', key=f'input_{i}_{j}',max_chars=5,value="1")
+                    value = st.selectbox(f'Diam.', ("0","3/8","1/2","5/8","3/4","7/8","1","1 1/8")key=f'input_{i}_{j}',index="3")
                     s_d_t[i][j] = value
     except:
         pass
