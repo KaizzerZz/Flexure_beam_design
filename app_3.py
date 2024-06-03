@@ -42,7 +42,8 @@ def Generate_report(beam):
         except:
             pass
 
-    os.system(f"pdflatex --output-directory=./Reports ./Reports/report_beam_section.tex")
+    command = f"pdflatex --output-directory=./Reports ./Reports/report_beam_section.tex"
+    subprocess.run(command, shell=True, capture_output=True, text=True)
 
 with st.sidebar:
     st.title("Propiedades geométricas")
