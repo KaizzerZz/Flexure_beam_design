@@ -77,11 +77,11 @@ def Generate_report_web(beam):
     ey = abs(beam.section.ey)
     st.latex(f"e_y={ey}")
     if et>=0.004:
-        st.latex(r"e_t <0.004 \therefore \text{Falla ductil}")
+        st.latex(r"e_t \geq 0.004 \therefore \text{Falla ductil}")
     elif et<ey:
-        st.latex(r"e_t <{ey} \therefore \text{Falla fragil}")
+        st.latex(r"e_t < e_y \therefore \text{Falla fragil}")
     elif et>=ey and et<=0.004:
-        st.latex(r"e_y < e_t}<0.004 \therefore \text{Falla intermedia}")
+        st.latex(r"e_y \leq e_t <0.004 \therefore \text{Falla intermedia}")
 
     st.write("***6) Acero mínimo según NTE060:***")
     st.latex(r"As_{min}=0.7\frac{\sqrt{f'c}}{fy} b_w d")
