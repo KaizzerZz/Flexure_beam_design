@@ -2,6 +2,7 @@ from Packages.Sections import Sections
 from Packages.Viga import Seccion_Viga,Viga
 import streamlit as st
 import numpy as np
+import subprocess
 
 path = "./Images"
 
