@@ -84,9 +84,9 @@ def Generate_report_web(beam):
         st.latex(r"e_y < e_t}<0.004 \therefore \text{Falla intermedia}")
 
     st.write("***6) Acero mínimo según NTE060: ***")
-    st.latex(r"As_{min}=0.7\frac{\sqrt{f'c}}{fy} b_w d") + st.latex("Plss")
-    st.latex(f"= {str(round(beam.Asmin,1))} cm^2") 
-    st.latex(f"={str(round(beam.Asmin,1))} cm^2")
+    st.latex(r"As_{min}=0.7\frac{\sqrt{f'c}}{fy} b_w d")
+    st.latex(r"As_{min}" + f"= {str(round(beam.Asmin,1))} cm^2") 
+    st.latex(r"As_{total}" + f"={str(round(beam.Asmin,1))} cm^2")
     if beam.As_tot>=beam.Asmin:
         st.latex(r"As_{total} \geq As_{min} \therefore \text{Cumple con la cuantía mínima}")    
     else:
