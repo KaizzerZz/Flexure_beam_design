@@ -73,16 +73,19 @@ def Generate_report_web(beam):
     st.latex(f"M_n=C_c(CP-y_c)+ \sum Fs_i(CP-y_i)={str(round(beam.section.Mn,2))} tonf-m")
     st.write("***5)Tipo de falla***")
     et = abs(beam.section.et)
+    st.latex(f"e_t={et}")
     ey = abs(beam.section.ey)
+    st.latex(f"e_y={ey}")
     if et>=0.004:
-        st.latex(rf"e_t={et} <0.004 \therefore \text{Falla ductil}")
+        st.latex(r"e_t <0.004 \therefore \text{Falla ductil}")
     elif et<ey:
-        st.latex(rf"e_t={et} <{ey} \therefore \text{Falla fragil}")
+        st.latex(r"e_t <{ey} \therefore \text{Falla fragil}")
     elif et>=ey and et<=0.004:
-        st.latex(rf"e_y={ey} < e_t={et}<0.004 \therefore \text{Falla intermedia}")
+        st.latex(r"e_y < e_t}<0.004 \therefore \text{Falla intermedia}")
 
     st.write("***6) Acero mínimo según NTE060: ***")
-    st.latex(r"As_{min}=0.7\frac{\sqrt{f'c}}{fy} b_w d = {str(round(beam.Asmin,1))} cm^2")
+    st.latex(r"As_{min}=0.7\frac{\sqrt{f'c}}{fy} b_w d")
+    st.latex(f"As_{min}= {str(round(beam.Asmin,1))} cm^2")
     st.latex(f"As_{total}={str(round(beam.Asmin,1))} cm^2")
     if beam.As_tot>=beam.Asmin:
         st.latex(r"As_{total} \geq As_{min} \therefore \text{Cumple con la cuantía mínima}")    
