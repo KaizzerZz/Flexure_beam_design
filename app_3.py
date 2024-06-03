@@ -43,6 +43,7 @@ def Generate_report(beam):
         except:
             pass
 
+    st.write(os.path.isfile('./Reports/report_beam_section.tex'))
     #os.system(f"pdflatex --output-directory=./Reports ./Reports/report_beam_section.tex")
     output_dir='./Reports'
     tex_file_path='./Reports/report_beam_section.tex'
