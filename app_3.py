@@ -4,6 +4,8 @@ import streamlit as st
 import numpy as np
 import subprocess
 from jinja2 import Environment, FileSystemLoader
+import os
+
 
 path = "./Images"
 
@@ -26,8 +28,7 @@ def Flexure_Beam_Rec_Section(fc,fy,Es,b,h,strr,s_d_t,espacing,s_d_c,path):
     return beam_sec_1
 
 def Generate_report(beam):
-    import os
-
+    
     env = Environment(
         
         loader=FileSystemLoader(''),  ##This will set the "relative directory" the current directory where this file is located
