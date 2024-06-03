@@ -48,11 +48,12 @@ def Generate_report(beam):
     #os.system(f"pdflatex --output-directory=./Reports ./Reports/report_beam_section.tex")
     output_dir='./Reports'
     tex_file_path='./Reports/report_beam_section.tex'
-    result = subprocess.run(
-            ['pdflatex', '-output-directory', output_dir, tex_file_path],
-            check=True,  # Raise an error if the command fails
+    command = ['pdflatex', '-output-directory', output_dir, tex_file_path]
+    result = subprocess.Popen(
+            command,
             stdout=subprocess.PIPE,  # Capture standard output
             stderr=subprocess.PIPE   # Capture standard error
+            text=True
         )
     st.write(result.stdout.decode())
     st.write(result.stderr.decode())
