@@ -52,7 +52,7 @@ def Generate_report(beam):
     result = subprocess.Popen(
             command,
             stdout=subprocess.PIPE,  # Capture standard output
-            stderr=subprocess.PIPE   # Capture standard error
+            stderr=subprocess.PIPE,   # Capture standard error
             text=True
         )
     st.write(result.stdout.decode())
