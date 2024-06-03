@@ -73,7 +73,7 @@ def Generate_report_web(beam):
     st.latex(f"M_n=C_c(CP-y_c)+ \sum Fs_i(CP-y_i)={str(round(beam.section.Mn,2))} tonf-m")
     st.write("***5)Tipo de falla***")
     et = abs(beam.section.et)
-    st.latex(f"e_t={et}")
+    st.latex(f"e_t={str(round(et,2))}")
     ey = abs(beam.section.ey)
     st.latex(f"e_y={ey}")
     if et>=0.004:
