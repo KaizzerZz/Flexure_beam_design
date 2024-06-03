@@ -40,23 +40,32 @@ def Generate_report(beam):
     with open('./Reports/report_beam_section.tex', "w",encoding='utf-8') as f:
         try:
             f.write(template.render(beam=beam))
-            st.write("Succesfully written")
+            #st.write("Succesfully written")
         except:
             pass
 
-    st.write(os.path.isfile('./Reports/report_beam_section.tex'))
-    #os.system(f"pdflatex --output-directory=./Reports ./Reports/report_beam_section.tex")
-    output_dir='./Reports'
-    tex_file_path='./Reports/report_beam_section.tex'
-    command = ['pdflatex', '-output-directory', output_dir, tex_file_path]
-    result = subprocess.Popen(
-            command,
-            stdout=subprocess.PIPE,  # Capture standard output
-            stderr=subprocess.PIPE,   # Capture standard error
-            text=True
-        )
-    st.write(result.stdout.decode())
-    st.write(result.stderr.decode())
+    #st.write(os.path.isfile('./Reports/report_beam_section.tex'))
+    os.system(f"pdflatex --output-directory=./Reports ./Reports/report_beam_section.tex")
+
+def Generate_report_web():
+    beam = Flexure_Beam_Rec_Section(fc,fy,Es,b,h,strr,s_d_t,espacing,s_d_c,path)
+    st.title("Compatibilidad de deformaciones y área de Whitney")
+    st.image('./Images/Beam sect.png',use_column_width="auto",caption="Sección de viga y área de Whitney")
+    st.image('./Images/Beam deformation compatibility.png',use_column_width="auto",caption="Compatibilidad de deformaciones")
+    st.title("Cálculos")
+    st.write("***1) Cálculos previos:***")
+    st.latex(f"c={str(round(beam.section.c,2))}cm")
+    st.latex(f"β_1={str(beam.section.b1)},a=β_1c={str(round(beam.section.a,2))} cm")
+    st.write("***2) Fuerzas de acero y concreto:***")
+    st.latex(f"C_c=0.85f'cAw={str(round(beam.section.Cc,2))} tonf")
+    for i in range(beam.section.n_s):
+        st.write(f"**Capa {i+1}:**")
+        st.latex(f"es_{i+1}={str(beam.section.es[i])},fs_{i+1}={str(beam.section.fs[i])}kgf/cm^2,Fs_{i+1}=fs_{i+1}As_{i+1}={str(round(beam.section.Fs[i],2))}tonf")
+    
+    st.write("***3)Fuerzas nominales***")
+    st.latex(f"P_n=C_c+ \sum Fs_i= {str(round(beam.section.Pn,2))} tonf")
+    st.latex(f"M_n=C_c(CP-y_c)+ \sum Fs_i(CP-y_i)={str(round(beam.section.Mn,2))} tonf-m")
+    
 
 with st.sidebar:
     st.title("Propiedades geométricas")
@@ -149,7 +158,7 @@ if button:
         Generate_report(beam)
         st.success("Report generated!")
     except:
-        st.error("Erro")
+        st.error("Error")
     button=False
 
 st.write(os.path.isfile('./Reports/report_beam_section.pdf'))
