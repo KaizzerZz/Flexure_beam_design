@@ -147,6 +147,8 @@ if button:
     except:
         st.error("Erro")
     button=False
+
+st.write(os.path.isfile('./Reports/report_beam_section.pdf'))
 try:
     with open("./Reports/report_beam_section.pdf", "rb") as pdf_file:
         PDFbyte = pdf_file.read()
