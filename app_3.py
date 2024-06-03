@@ -57,19 +57,40 @@ def Generate_report_web(beam):
     st.image('./Images/Beam sect.png',use_column_width="auto",caption="Sección de viga y área de Whitney")
     st.image('./Images/Beam deformation compatibility.png',use_column_width="auto",caption="Compatibilidad de deformaciones")
     st.title("Cálculos")
-    st.write("***1) Cálculos previos:***")
+    st.write("***1) Condición de falla: $e_t \leq 0.004$ ***")
+    st.write("***2) Cálculos previos:***")
     st.latex(f"c={str(round(beam.section.c,2))}cm")
     st.latex(f"β_1={str(beam.section.b1)},a=β_1c={str(round(beam.section.a,2))} cm")
     st.latex(f"A_w={str(round(beam.section.Aw,2))} cm^2")
-    st.write("***2) Fuerzas de acero y concreto:***")
+    st.write("***3) Fuerzas de acero y concreto:***")
     st.latex(f"C_c=0.85f'cAw={str(round(beam.section.Cc,2))} tonf")
     for i in range(beam.section.n_s):
         st.write(f"**Capa {i+1}:**")
         st.latex(f"es_{i+1}={str(beam.section.es[i])},fs_{i+1}={str(beam.section.fs[i])}kgf/cm^2,Fs_{i+1}=fs_{i+1}As_{i+1}={str(round(beam.section.Fs[i],2))}tonf")
     
-    st.write("***3)Fuerzas nominales***")
+    st.write("***4)Fuerzas nominales***")
     st.latex(f"P_n=C_c+ \sum Fs_i= {str(round(beam.section.Pn,2))} tonf")
     st.latex(f"M_n=C_c(CP-y_c)+ \sum Fs_i(CP-y_i)={str(round(beam.section.Mn,2))} tonf-m")
+    st.write("***5)Tipo de falla***")
+    et = abs(beam.section.et)
+    ey = abs(beam.section.ey)
+    if et>=0.004:
+        st.latex(f"e_t={et} <0.004 \therefore \text{Falla ductil}")
+    elif et<ey:
+        st.latex(f"e_t={et} <{ey} \therefore \text{Falla fragil}")
+    elif et>=ey and et<=0.004:
+        st.latex(f"e_y={ey} < e_t={et}<0.004 \therefore \text{Falla intermedia}")
+
+    st.write("***6) Acero mínimo según NTE060: ***")
+    st.latex(f"As_{min}=0.7\frac{\sqrt{f'c}}{fy} b_w d = {str(round(beam.Asmin,1))} cm^2")
+    st.latex(f"As_{total}={str(round(beam.Asmin,1))} cm^2")
+    if beam.As_tot>=beam.Asmin:
+        st.latex(f"As_{total} \geq As_{min} \therefore \text{Cumple con la cuantía mínima}")    
+    else:
+        st.latex(f"As_{total} < As_{min} \therefore \text{No cumple con la cuantía mínima}")
+                                                            
+    
+    
     
 
 with st.sidebar:
@@ -77,7 +98,7 @@ with st.sidebar:
 
     b = st.number_input("Base (cm)",value=30)
 
-    h = st.number_input("Peralte (cm)",value=60)
+    h = st.number_input("Peralte (cm)",value=50)
 
     st.title("Propiedades de los materiales")
 
@@ -89,7 +110,7 @@ with st.sidebar:
 
     st.title("Acero transversal")
 
-    strr = st.text_input("Diámetro de estribo (pulg)",value="3/8")
+    strr = st.selectbox("Diámetro de estribo (pulg)",("0","3/8","1/2","5/8","3/4","7/8","1","1 1/8"),index=1)
 
     st.title("Acero longitudinal en tracción")
 
@@ -126,12 +147,12 @@ with st.sidebar:
     s_d_c = [None]*columns_c
     for i in range(columns_c):
         with cols_c[i]:
-            value = st.text_input(f'Diam.', key=f'input_{i}',max_chars=5,value=r"3/8")
+            value = st.selectbox(f'Diam.', ("0","3/8","1/2","5/8","3/4","7/8","1","1 1/8"),key=f'input_{i}',value=1)
             s_d_c[i] = value
 
 st.title("Diseño de viga a flexión")
 st.write("Para definir la sección de la viga, se deberá indicar sus propiedades geométricas, del material y de la distribución de aceros en tracción y compresión.")
-st.write("En la parte final podrá descargar una memoria de los cálculos realizados internamente así como la verificación de acero mínimo según la E060 y el tipo de falla que se presentaría.")
+st.write("Más adelante podrá generar una memoria de los cálculos realizados internamente así como la verificación de acero mínimo según la E060 y el tipo de falla que se presentaría.")
 
 beam = Define_beam(fc,fy,Es,b,h,strr,s_d_t,espacing,s_d_c,path)
 st.image('./Images/Beam Section.png',use_column_width="auto",caption="Sección de viga propuesta")
@@ -148,7 +169,7 @@ if button:
         st.error("Error")
     button=False
 
-st.write(os.path.isfile('./Reports/report_beam_section.pdf'))
+#st.write(os.path.isfile('./Reports/report_beam_section.pdf'))
 try:
     with open("./Reports/report_beam_section.pdf", "rb") as pdf_file:
         PDFbyte = pdf_file.read()
