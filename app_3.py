@@ -147,7 +147,7 @@ with st.sidebar:
     s_d_c = [None]*columns_c
     for i in range(columns_c):
         with cols_c[i]:
-            value = st.selectbox(f'Diam.', ("0","3/8","1/2","5/8","3/4","7/8","1","1 1/8"),key=f'input_{i}',value=1)
+            value = st.selectbox(f'Diam.', ("0","3/8","1/2","5/8","3/4","7/8","1","1 1/8"),key=f'input_{i}',index=1)
             s_d_c[i] = value
 
 st.title("Diseño de viga a flexión")
