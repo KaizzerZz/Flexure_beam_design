@@ -21,6 +21,7 @@ class Sections():
         self.dt = None
         self.Pn = None
         self.Mn = None
+        self.fi = None
         self.fig1 = None
         self.fig2 = None
     
@@ -97,6 +98,7 @@ class Sections():
             fi =  a + b*(et-ey)/(0.005-ey)
         elif(et>=0.005):
             fi = 0.9
+        self.fi = fi
         
         #Calcs
 
