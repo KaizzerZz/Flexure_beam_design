@@ -76,12 +76,12 @@ def Generate_report_web(beam):
     st.latex(f"e_t={str(round(et,2))}")
     ey = abs(beam.section.ey)
     st.latex(f"e_y={ey}")
-    if et>=0.004:
-        st.latex(r"e_t \geq 0.004 \therefore \text{Falla ductil}")
+    if et>=0.005:
+        st.latex(r"e_t \geq 0.005 \therefore \text{Falla ductil}")
     elif et<ey:
         st.latex(r"e_t < e_y \therefore \text{Falla fragil}")
-    elif et>=ey and et<=0.004:
-        st.latex(r"e_y \leq e_t <0.004 \therefore \text{Falla intermedia}")
+    elif et>=ey and et<=0.005:
+        st.latex(r"e_y \leq e_t <0.005 \therefore \text{Falla intermedia}")
     st.latex(f"\phi = {round(beam.section.fi,2)}")
     st.write("***6) Momento resistente:***")
     st.latex(f"\phi M_n = {round(beam.section.fi*beam.section.Mn,2)} tonf-m")
