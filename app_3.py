@@ -84,7 +84,7 @@ def Generate_report_web(beam):
         st.latex(r"e_y \leq e_t <0.004 \therefore \text{Falla intermedia}")
     st.latex(f"\phi = {round(beam.section.fi,2)}")
     st.write("***6) Momento resistente:***")
-    st.latex("\phi M_n = {round(beam.section.fi*beam.section.Mn,2)} tonf-m")
+    st.latex(f"\phi M_n = {round(beam.section.fi*beam.section.Mn,2)} tonf-m")
     st.write("***7) Acero mínimo según NTE060:***")
     st.latex(r"As_{min}=0.7\frac{\sqrt{f'c}}{fy} b_w d")
     st.latex(r"As_{min}" + f"= {str(round(beam.Asmin,1))} cm^2") 
