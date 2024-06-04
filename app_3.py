@@ -57,7 +57,7 @@ def Generate_report_web(beam):
     st.image('./Images/Beam sect.png',use_column_width="auto",caption="Sección de viga y área de Whitney")
     st.image('./Images/Beam deformation compatibility.png',use_column_width="auto",caption="Compatibilidad de deformaciones")
     st.title("Cálculos")
-    st.write("***1) Condición de falla: $e_t \leq 0.004$***")
+    st.write("***1) Condición de falla: $e_t \geq 0.004$***")
     st.write("***2) Cálculos previos:***")
     st.latex(f"c={str(round(beam.section.c,2))}cm")
     st.latex(f"β_1={str(beam.section.b1)},a=β_1c={str(round(beam.section.a,2))} cm")
